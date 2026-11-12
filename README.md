@@ -24,28 +24,71 @@ pip install -e ".[dev]"
 
 ---
 
-## Quickstart
+## Quickstart & Authentication
 
+### Phone Number Login
 ```python
 from jiocloud import JioCloudClient
 
-# Initialize client with credentials or session token
+client = JioCloudClient()
+
+# 1. Send OTP to mobile number
+client.auth.send_otp(mobile_number="+910000000000")
+
+# 2. Verify OTP
+auth_result = client.auth.verify_otp(mobile_number="+910000000000", otp="123456")
+print(auth_result)
+```
+
+### Email Login
+```python
+from jiocloud import JioCloudClient
+
+client = JioCloudClient()
+
+# 1. Send OTP to email address
+client.auth.send_otp(email_id="user@example.com")
+
+# 2. Verify OTP
+auth_result = client.auth.verify_otp(email_id="user@example.com", otp="123456")
+print(auth_result)
+```
+
+### File & Folder Operations
+```python
+# Initialize with user ID and device key
 client = JioCloudClient(user_id="<USER_ID>", device_key="<DEVICE_KEY>")
 
-# List files and folders
-files = client.files.list()
-for f in files:
-    print(f.name, f.size)
+# List files
+for file in client.files.list():
+    print(file.name, file.size)
+
+# Create a folder
+folder = client.folders.create("My Documents")
+
+# Upload a file with progress callback
+client.transfer.upload(
+    "local_document.pdf",
+    parent_id=folder.id,
+    progress_callback=lambda up, total: print(f"Uploaded {up}/{total} bytes"),
+)
+
+# Download a file with progress callback
+client.transfer.download(
+    file_id="<FILE_ID>",
+    dest_path="downloaded.pdf",
+    progress_callback=lambda down, total: print(f"Downloaded {down}/{total} bytes"),
+)
 ```
 
 ---
 
 ## Features
 
-- **Authentication:** OTP-based sign-in and session management.
+- **Authentication:** OTP-based sign-in via Mobile Number or Email ID, automatic token refresh, and session management.
 - **Files & Folders:** List, get metadata, create folders, rename, move, and delete files.
-- **Transfer:** Upload and download files with progress callbacks.
-- **Typed & Robust:** Full type hints (`py.typed`) and built-in error handling.
+- **Transfer:** Upload and download files with streaming and progress callbacks.
+- **Typed & Robust:** Full type hints (`py.typed`) and built-in error handling with secret redaction.
 
 ---
 
