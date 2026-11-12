@@ -6,6 +6,29 @@ from typing import Any, Callable, Optional
 from jiocloud._http import JioCloudHTTPClient
 
 
+class ProgressStream:
+    """Wrapper file object to report upload progress."""
+
+    def __init__(
+        self,
+        file_obj: Any,
+        file_size: int,
+        callback: Optional[Callable[[int, Optional[int]], None]],
+    ) -> None:
+        self.file_obj = file_obj
+        self.file_size = file_size
+        self.callback = callback
+        self.uploaded = 0
+
+    def read(self, size: int = -1) -> bytes:
+        chunk = self.file_obj.read(size)
+        if chunk:
+            self.uploaded += len(chunk)
+            if self.callback:
+                self.callback(self.uploaded, self.file_size)
+        return chunk
+
+
 class TransferService:
     """Handles file downloads and uploads with optional progress callbacks."""
 
@@ -45,7 +68,7 @@ class TransferService:
         parent_id: Optional[str] = None,
         progress_callback: Optional[Callable[[int, Optional[int]], None]] = None,
     ) -> dict[str, Any]:
-        """Upload a local file with progress callback.
+        """Upload a local file with chunked streaming and progress callback.
 
         Args:
             file_path: Path to local file.
@@ -59,14 +82,13 @@ class TransferService:
         file_size = os.path.getsize(file_path)
         filename = os.path.basename(file_path)
 
-        with open(file_path, "rb") as f:
-            files = {"file": (filename, f)}
+        with open(file_path, "rb") as raw_f:
+            streamed_f = ProgressStream(raw_f, file_size, progress_callback)
+            files = {"file": (filename, streamed_f)}
             data = {}
             if parent_id:
                 data["parentId"] = parent_id
 
             response = self.http.client.post(url, files=files, data=data)
-            if progress_callback:
-                progress_callback(file_size, file_size)
             res = self.http._handle_response(response)
             return dict(res) if isinstance(res, dict) else {}
