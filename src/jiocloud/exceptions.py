@@ -1,6 +1,26 @@
-"""Exception hierarchy for python-jiocloud."""
+"""Exception hierarchy for python-jiocloud with sensitive data redaction."""
 
+import re
 from typing import Optional
+
+
+def _sanitize_message(message: str) -> str:
+    """Redact tokens, cookies, and authorization secrets from error messages."""
+    if not message:
+        return message
+    message = re.sub(
+        r"(authorization|bearer|basic)\s+[^\s]+",
+        r"\1 [REDACTED]",
+        message,
+        flags=re.IGNORECASE,
+    )
+    message = re.sub(
+        r"(token|cookie|secret|key)=[^&\s]+",
+        r"\1=[REDACTED]",
+        message,
+        flags=re.IGNORECASE,
+    )
+    return message
 
 
 class JioCloudError(Exception):
@@ -12,10 +32,13 @@ class JioCloudError(Exception):
         status_code: Optional[int] = None,
         response_body: Optional[str] = None,
     ) -> None:
-        super().__init__(message)
-        self.message = message
+        sanitized_msg = _sanitize_message(message)
+        super().__init__(sanitized_msg)
+        self.message = sanitized_msg
         self.status_code = status_code
-        self.response_body = response_body
+        self.response_body = (
+            _sanitize_message(response_body) if response_body else None
+        )
 
 
 class AuthError(JioCloudError):
