@@ -6,6 +6,7 @@ from jiocloud._http import JioCloudHTTPClient
 from jiocloud.auth import AuthService
 from jiocloud.files import FileService
 from jiocloud.folders import FolderService
+from jiocloud.media import MediaService
 from jiocloud.transfer import TransferService
 
 
@@ -38,6 +39,7 @@ class JioCloudClient:
         self.files = FileService(self.http)
         self.folders = FolderService(self.http)
         self.transfer = TransferService(self.http)
+        self.media = MediaService(self.http)
 
     def update_auth(
         self,
