@@ -1,7 +1,11 @@
 """File management service for JioCloud."""
 
+import logging
+
 from jiocloud._http import JioCloudHTTPClient
 from jiocloud.models import JioFile
+
+logger = logging.getLogger("jiocloud.files")
 
 
 class FileService:
@@ -27,8 +31,17 @@ class FileService:
                 raw_list = response["metadata"]
             if isinstance(raw_list, list):
                 items = [JioFile.from_dict(item) for item in raw_list]
+            else:
+                logger.warning(
+                    "Unexpected schema for files list response: %s",
+                    type(response.get("files")),
+                )
         elif isinstance(response, list):
             items = [JioFile.from_dict(item) for item in response]
+        else:
+            logger.warning(
+                "Unexpected response type for files list: %s", type(response)
+            )
         return items
 
     def get(self, file_id: str) -> JioFile:

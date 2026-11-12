@@ -1,9 +1,12 @@
 """Folder management service for JioCloud."""
 
+import logging
 from typing import Any, Optional
 
 from jiocloud._http import JioCloudHTTPClient
 from jiocloud.models import JioFolder
+
+logger = logging.getLogger("jiocloud.folders")
 
 
 class FolderService:
@@ -27,8 +30,17 @@ class FolderService:
             )
             if isinstance(raw_list, list):
                 items = [JioFolder.from_dict(item) for item in raw_list]
+            else:
+                logger.warning(
+                    "Unexpected schema for folders list response: %s",
+                    type(response.get("folders")),
+                )
         elif isinstance(response, list):
             items = [JioFolder.from_dict(item) for item in response]
+        else:
+            logger.warning(
+                "Unexpected response type for folders list: %s", type(response)
+            )
         return items
 
     def create(self, name: str, parent_id: Optional[str] = None) -> JioFolder:

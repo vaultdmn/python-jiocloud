@@ -24,12 +24,10 @@ def test_auth_services() -> None:
 @respx.mock
 def test_file_services() -> None:
     respx.get("https://jaws-api.jioaicloud.com/nms/metadata").respond(
-        200,
-        json={"files": [{"fileId": "f1", "name": "doc.txt", "size": 1024}]}
+        200, json={"files": [{"fileId": "f1", "name": "doc.txt", "size": 1024}]}
     )
     respx.get("https://jaws-api.jioaicloud.com/nms/metadata/version/f1").respond(
-        200,
-        json={"fileId": "f1", "name": "doc.txt", "size": 1024}
+        200, json={"fileId": "f1", "name": "doc.txt", "size": 1024}
     )
     respx.put("https://jaws-api.jioaicloud.com/nms/metadata/1.0").respond(200, json={})
     respx.delete("https://jaws-api.jioaicloud.com/nms/metadata/1.0").respond(200, json={})
@@ -51,12 +49,10 @@ def test_file_services() -> None:
 @respx.mock
 def test_folder_services() -> None:
     respx.get("https://jaws-api.jioaicloud.com/nms/folders").respond(
-        200,
-        json={"folders": [{"folderId": "fold1", "name": "Photos"}]}
+        200, json={"folders": [{"folderId": "fold1", "name": "Photos"}]}
     )
     respx.post("https://jaws-api.jioaicloud.com/nms/folders").respond(
-        200,
-        json={"folderId": "fold2", "name": "Documents"}
+        200, json={"folderId": "fold2", "name": "Documents"}
     )
 
     client = JioCloudClient()
@@ -66,6 +62,19 @@ def test_folder_services() -> None:
 
     new_fold = client.folders.create("Documents")
     assert new_fold.name == "Documents"
+
+
+@respx.mock
+def test_file_and_folder_unexpected_schema() -> None:
+    respx.get("https://jaws-api.jioaicloud.com/nms/metadata").respond(
+        200, json={"files": "not_a_list"}
+    )
+    respx.get("https://jaws-api.jioaicloud.com/nms/folders").respond(
+        200, json={"folders": 12345}
+    )
+    client = JioCloudClient()
+    assert client.files.list() == []
+    assert client.folders.list() == []
 
 
 @respx.mock
