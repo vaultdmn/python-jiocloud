@@ -14,7 +14,10 @@ from jiocloud.exceptions import (
 
 
 class JioCloudHTTPClient:
-    """Wrapper around httpx.Client with default headers, error mapping, retries, and token refresh."""
+    """Wrapper around httpx.Client with default headers, error mapping,
+
+    retries, and token refresh.
+    """
 
     DEFAULT_API_KEY = "c153b48e-d8a1-48a0-a40d-293f1dc5be0e"
     DEFAULT_APP_SECRET = "ODc0MDE2M2EtNGY0MC00YmU2LTgwZDUtYjNlZjIxZGRkZjlj"
@@ -182,9 +185,7 @@ class JioCloudHTTPClient:
                     if retries < self.max_retries:
                         retries += 1
                         continue
-                return self._handle_response(
-                    response, method, url, kwargs, refreshed=False
-                )
+                return self._handle_response(response, method, url, kwargs, refreshed=False)
             except (httpx.TransportError, httpx.TimeoutException) as exc:
                 if retries < self.max_retries:
                     retries += 1

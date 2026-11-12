@@ -16,9 +16,22 @@ def test_auth_services() -> None:
     )
 
     client = JioCloudClient()
-    client.auth.send_otp("+910000000000")
-    res = client.auth.verify_otp("+910000000000", "123456")
+    client.auth.send_otp(mobile_number="+910000000000")
+    res = client.auth.verify_otp(mobile_number="+910000000000", otp="123456")
     assert res["userId"] == "test_user_123"
+
+
+@respx.mock
+def test_email_auth_services() -> None:
+    respx.post("https://api.jioaicloud.com/account/login/otp/send").respond(204)
+    respx.post("https://api.jioaicloud.com/account/otp/login").respond(
+        200, json={"userId": "email_user_456"}
+    )
+
+    client = JioCloudClient()
+    client.auth.send_otp(email_id="user@example.com")
+    res = client.auth.verify_otp(email_id="user@example.com", otp="123456")
+    assert res["userId"] == "email_user_456"
 
 
 @respx.mock
@@ -69,9 +82,7 @@ def test_file_and_folder_unexpected_schema() -> None:
     respx.get("https://jaws-api.jioaicloud.com/nms/metadata").respond(
         200, json={"files": "not_a_list"}
     )
-    respx.get("https://jaws-api.jioaicloud.com/nms/folders").respond(
-        200, json={"folders": 12345}
-    )
+    respx.get("https://jaws-api.jioaicloud.com/nms/folders").respond(200, json={"folders": 12345})
     client = JioCloudClient()
     assert client.files.list() == []
     assert client.folders.list() == []

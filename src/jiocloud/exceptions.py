@@ -36,9 +36,7 @@ class JioCloudError(Exception):
         super().__init__(sanitized_msg)
         self.message = sanitized_msg
         self.status_code = status_code
-        self.response_body = (
-            _sanitize_message(response_body) if response_body else None
-        )
+        self.response_body = _sanitize_message(response_body) if response_body else None
 
 
 class AuthError(JioCloudError):

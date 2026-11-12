@@ -48,9 +48,7 @@ def test_http_error_mapping() -> None:
 
 @respx.mock
 def test_http_retries() -> None:
-    route = respx.get("https://api.jioaicloud.com/retry").respond(
-        503, text="Service Unavailable"
-    )
+    route = respx.get("https://api.jioaicloud.com/retry").respond(503, text="Service Unavailable")
     http = JioCloudHTTPClient(max_retries=2)
     with pytest.raises(APIError):
         http.get("https://api.jioaicloud.com/retry")
@@ -59,9 +57,7 @@ def test_http_retries() -> None:
 
 @respx.mock
 def test_http_no_retry_on_4xx() -> None:
-    route = respx.get("https://api.jioaicloud.com/bad").respond(
-        400, text="Bad Request"
-    )
+    route = respx.get("https://api.jioaicloud.com/bad").respond(400, text="Bad Request")
     http = JioCloudHTTPClient(max_retries=2)
     with pytest.raises(APIError):
         http.get("https://api.jioaicloud.com/bad")

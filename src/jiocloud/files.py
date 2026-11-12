@@ -21,12 +21,7 @@ class FileService:
         response = self.http.get(url)
         items: list[JioFile] = []
         if isinstance(response, dict):
-            raw_list = (
-                response.get("files")
-                or response.get("items")
-                or response.get("data")
-                or []
-            )
+            raw_list = response.get("files") or response.get("items") or response.get("data") or []
             if not raw_list and "metadata" in response:
                 raw_list = response["metadata"]
             if isinstance(raw_list, list):
@@ -39,9 +34,7 @@ class FileService:
         elif isinstance(response, list):
             items = [JioFile.from_dict(item) for item in response]
         else:
-            logger.warning(
-                "Unexpected response type for files list: %s", type(response)
-            )
+            logger.warning("Unexpected response type for files list: %s", type(response))
         return items
 
     def get(self, file_id: str) -> JioFile:

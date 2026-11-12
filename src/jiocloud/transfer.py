@@ -1,13 +1,14 @@
 """File transfer service for downloading and uploading files with progress callbacks."""
 
+import io
 import os
 from typing import Any, Callable, Optional
 
 from jiocloud._http import JioCloudHTTPClient
 
 
-class ProgressStream:
-    """Wrapper file object to report upload progress."""
+class ProgressStream(io.IOBase):
+    """Wrapper file-like object to report upload progress."""
 
     def __init__(
         self,
@@ -20,8 +21,11 @@ class ProgressStream:
         self.callback = callback
         self.uploaded = 0
 
+    def readable(self) -> bool:
+        return True
+
     def read(self, size: int = -1) -> bytes:
-        chunk = self.file_obj.read(size)
+        chunk: bytes = self.file_obj.read(size)
         if chunk:
             self.uploaded += len(chunk)
             if self.callback:
@@ -84,7 +88,7 @@ class TransferService:
 
         with open(file_path, "rb") as raw_f:
             streamed_f = ProgressStream(raw_f, file_size, progress_callback)
-            files = {"file": (filename, streamed_f)}
+            files: Any = {"file": (filename, streamed_f)}
             data = {}
             if parent_id:
                 data["parentId"] = parent_id

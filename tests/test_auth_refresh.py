@@ -31,9 +31,7 @@ def test_token_refresh_success() -> None:
 
 @respx.mock
 def test_token_refresh_failure() -> None:
-    respx.get("https://api.jioaicloud.com/protected").respond(
-        401, text="Expired Token"
-    )
+    respx.get("https://api.jioaicloud.com/protected").respond(401, text="Expired Token")
     respx.put("https://api.jioaicloud.com/account/token/refresh").respond(
         401, text="Invalid Refresh"
     )

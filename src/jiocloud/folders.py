@@ -23,10 +23,7 @@ class FolderService:
         items: list[JioFolder] = []
         if isinstance(response, dict):
             raw_list = (
-                response.get("folders")
-                or response.get("items")
-                or response.get("data")
-                or []
+                response.get("folders") or response.get("items") or response.get("data") or []
             )
             if isinstance(raw_list, list):
                 items = [JioFolder.from_dict(item) for item in raw_list]
@@ -38,9 +35,7 @@ class FolderService:
         elif isinstance(response, list):
             items = [JioFolder.from_dict(item) for item in response]
         else:
-            logger.warning(
-                "Unexpected response type for folders list: %s", type(response)
-            )
+            logger.warning("Unexpected response type for folders list: %s", type(response))
         return items
 
     def create(self, name: str, parent_id: Optional[str] = None) -> JioFolder:
