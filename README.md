@@ -1,9 +1,9 @@
 # python-jiocloud
 
-[![CI](https://github.com/vaultdmn/python-jiocloud/actions/workflows/ci.yml/badge.svg)](https://github.com/vaultdmn/python-jiocloud/actions/workflows/ci.yml)
-[![PyPI version](https://img.shields.io/pypi/v/python-jiocloud.svg)](https://pypi.org/project/python-jiocloud/)
-[![Python Version](https://img.shields.io/pypi/pyversions/python-jiocloud.svg)](https://pypi.org/project/python-jiocloud/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![CI](https://github.com/vaultdmn/python-jiocloud/actions/workflows/ci.yml/badge.svg?style=flat)](https://github.com/vaultdmn/python-jiocloud/actions/workflows/ci.yml)
+[![PyPI version](https://img.shields.io/pypi/v/python-jiocloud.svg?style=flat)](https://pypi.org/project/python-jiocloud/)
+[![Python Version](https://img.shields.io/pypi/pyversions/python-jiocloud.svg?style=flat)](https://pypi.org/project/python-jiocloud/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat)](https://opensource.org/licenses/MIT)
 
 An unofficial Python client and library for JioCloud web API, built with `httpx`.
 
