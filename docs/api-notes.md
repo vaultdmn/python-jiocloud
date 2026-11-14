@@ -18,7 +18,7 @@ Every request to JioCloud APIs must include standard client identification heade
 
 | Header Name | Value / Description |
 | :--- | :--- |
-| `X-Api-Key` | Static API key (`c153b48e-d8a1-48a0-a40d-293f1dc5be0e` or configurable) |
+| `X-Api-Key` | Static API key (`<API_KEY>`, configurable) |
 | `X-App-Secret` | Base64 encoded app secret |
 | `X-Client-Details` | `clientType:WEB; appVersion:89.0.12` |
 | `X-Device-Type` | `W` (Web client) |

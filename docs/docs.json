@@ -1,0 +1,39 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "python-jiocloud",
+  "description": "Unofficial Python client and library for the JioCloud web API.",
+  "colors": {
+    "primary": "#1E40AF",
+    "light": "#3B82F6",
+    "dark": "#1E40AF"
+  },
+  "navigation": {
+    "groups": [
+      {
+        "group": "Overview",
+        "pages": ["index", "installation"]
+      },
+      {
+        "group": "Guides",
+        "pages": [
+          "authentication",
+          "files",
+          "folders",
+          "transfer",
+          "media",
+          "errors"
+        ]
+      },
+      {
+        "group": "Reference",
+        "pages": ["api-reference"]
+      }
+    ]
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/vaultdmn/python-jiocloud"
+    }
+  }
+}
