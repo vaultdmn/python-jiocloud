@@ -4,6 +4,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/python-jiocloud.svg?style=flat)](https://pypi.org/project/python-jiocloud/)
 [![Python Version](https://img.shields.io/pypi/pyversions/python-jiocloud.svg?style=flat)](https://pypi.org/project/python-jiocloud/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat)](https://opensource.org/licenses/MIT)
+[![Docs](https://img.shields.io/badge/docs-Mintlify-1E40AF.svg?style=flat)](https://python-jiocloud-40cae74b.mintlify.site/)
 
 An unofficial Python client and library for JioCloud web API, built with `httpx`.
 
@@ -21,6 +22,14 @@ For development:
 ```bash
 pip install -e ".[dev]"
 ```
+
+---
+
+## Documentation
+
+Complete usage guides and the API reference are published at:
+
+**https://python-jiocloud-40cae74b.mintlify.site/**
 
 ---
 
